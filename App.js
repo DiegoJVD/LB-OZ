@@ -1,5 +1,7 @@
 import './polyfills';
-import { ScrollView , Dimensions, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Button, StatusBar, Platform, SafeAreaView, StyleSheet, Text, TextInput, View, Pressable } from 'react-native';
+import Peso from './Pages/Peso';
+import Gallos from './Pages/Gallos';
+import { ScrollView, Dimensions, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Button, StatusBar, Platform, SafeAreaView, StyleSheet, Text, TextInput, View, Pressable } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import useUtils from './useUtils';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -7,111 +9,57 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-function Peso() {
-  const [libra, setLibra] = useState(0.0);
-  const [libraOZ, setLibraOZ] = useState('');
-  const { libraToOnza } = useUtils();
-  const handleChange = (text) => {
-    setLibra(text);
-    setLibraOZ(libraToOnza(text));
-  };
-  return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <SafeAreaView style={styles.safeArea} >
 
-        <StatusBar backgroundColor="purple" />
-        <View style={styles.container} onPress={() => setLibra(libra + 1)}>
-          <View style={styles.centerView}>
-            {/* <Text style={styles.text}>Introduce las libras</Text> */}
-            <TextInput
-              style={styles.input}
-              value={libra}
-              onChangeText={(e) => handleChange(e)}
-              placeholder="Introduzca las libras"
-              keyboardType="numeric"
-            />
-            <Text style={styles.numberText}>{libraOZ == 0.0 ? "0 lbs 0 oz" : libraOZ}</Text>
-            <TouchableOpacity
-              style={styles.button}
-            >
-              <Text style={{ color: "white" }}>Asignar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </SafeAreaView>
-    </TouchableWithoutFeedback>
-  );
-}
-
-function prueba() {
+function Prueba() {
 
   return (
-      <ScrollView 
-        style={styles.scrollView} 
-        contentContainerStyle={styles.contentContainer}
-      >
-        <Text style={styles.paragraph}>
-          This is a ScrollView example HEADER.
-        </Text>
-        <Text style={styles.paragraph}>
-            This is a ScrollView example paragraph.
-        </Text>
-        <Text style={styles.paragraph}>
-            This is a ScrollView example paragraph.
-        </Text>
-        <Text style={styles.paragraph}>
-            This is a ScrollView example paragraph.
-        </Text>
-        <Text style={styles.paragraph}>
-            This is a ScrollView example paragraph.
-        </Text>
-        <Text style={styles.paragraph}>
-            This is a ScrollView example paragraph.
-        </Text>
-        <Text style={styles.paragraph}>
-          This is a ScrollView example FOOTER.
-        </Text>
-      </ScrollView>
-  );
-}
+    <SafeAreaView style={styles.safeArea} >
 
-function Gallos() {
- // eslint-disable-line react-hooks/exhaustive-deps
-  return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <SafeAreaView style={styles.safeArea} >
+      <View>
 
-        <View style={{...styles.gallosContainer, backgroundColor: "blue", maxHeight: 70}}>
-          <TextInput
-            onChangeText={() => console.log(Dimensions.get('window'))}
-            style={styles.input}
-            height={60}
-            width={Dimensions.get('window').width}
-            placeholder="busqueda"
-            backgroundColor="white"
-          />
-        </View>
-        <View style={styles.gallosContainer}>
-          <ScrollView
-          nestedScrollEnabled = {true}
-          contentContainerStyle={{flex:0}}
-          style={styles.scrollView}>
-            {
-              [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0].map((gallo, index) => {
-                return (
-                  <View key={index} style={styles.carta}>
-                    <Text style={{...styles.text, padding: 10, width: 300}}>Gallo {index}</Text>
-                  </View>
-                );
-              }
-              )
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.contentContainer}
+        >
+          {
+            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((gallo, index) => {
+              return (
+                <View key={index} style={styles.carta}>
+                  <Text style={styles.paragraph}>Gallo {index}</Text>
+                </View>
+              );
             }
-          </ScrollView>
-        </View>
-      </SafeAreaView>
-    </TouchableWithoutFeedback>
+            )
+          }
+          <Text style={styles.paragraph}>
+            This is a ScrollView example HEADER.
+          </Text>
+          <Text style={styles.paragraph}>
+            This is a ScrollView example paragraph.
+          </Text>
+          <Text style={styles.paragraph}>
+            This is a ScrollView example paragraph.
+          </Text>
+          <Text style={styles.paragraph}>
+            This is a ScrollView example paragraph.
+          </Text>
+          <Text style={styles.paragraph}>
+            This is a ScrollView example paragraph.
+          </Text>
+          <Text style={styles.paragraph}>
+            This is a ScrollView example paragraph.
+          </Text>
+          <Text style={styles.paragraph}>
+            This is a ScrollView example FOOTER.
+          </Text>
+        </ScrollView>
+      </View>
+    </SafeAreaView>
+
   );
 }
+
+
 
 const Tab = createBottomTabNavigator();
 
@@ -135,10 +83,11 @@ export default function App() {
         tabBarOptions={{
           activeTintColor: 'purple',
           inactiveTintColor: 'gray',
+
         }}>
         <Tab.Screen name="Peso" component={Peso} />
         <Tab.Screen name="Gallos" component={Gallos} />
-        <Tab.Screen name="prueba" component={prueba} />
+        <Tab.Screen name="prueba" component={Prueba} />
       </Tab.Navigator>
     </NavigationContainer>
   );
@@ -229,14 +178,13 @@ const styles = StyleSheet.create({
     padding: 20,
     borderWidth: 5,
     borderRadius: 5,
-    borderColor: 'black',
-    backgroundColor: 'lightblue'
+
   },
   contentContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'lightgrey',
-    paddingBottom: 50
+    paddingBottom: 40
   }
 
 
