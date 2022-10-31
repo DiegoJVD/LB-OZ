@@ -1,6 +1,8 @@
 import './polyfills';
 import Peso from './Pages/Peso';
 import Gallos from './Pages/Gallos';
+import RegistroGallos from './Pages/RegistroGallos';
+import Prueba from './Pages/Prueba';
 import { ScrollView, Dimensions, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Button, StatusBar, Platform, SafeAreaView, StyleSheet, Text, TextInput, View, Pressable } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import useUtils from './useUtils';
@@ -8,60 +10,56 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { openDatabase } from 'react-native-sqlite-storage';
 
-
-function Prueba() {
-
-  return (
-    <SafeAreaView style={styles.safeArea} >
-
-      <View>
-
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.contentContainer}
-        >
-          {
-            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((gallo, index) => {
-              return (
-                <View key={index} style={styles.carta}>
-                  <Text style={styles.paragraph}>Gallo {index}</Text>
-                </View>
-              );
-            }
-            )
-          }
-          <Text style={styles.paragraph}>
-            This is a ScrollView example HEADER.
-          </Text>
-          <Text style={styles.paragraph}>
-            This is a ScrollView example paragraph.
-          </Text>
-          <Text style={styles.paragraph}>
-            This is a ScrollView example paragraph.
-          </Text>
-          <Text style={styles.paragraph}>
-            This is a ScrollView example paragraph.
-          </Text>
-          <Text style={styles.paragraph}>
-            This is a ScrollView example paragraph.
-          </Text>
-          <Text style={styles.paragraph}>
-            This is a ScrollView example paragraph.
-          </Text>
-          <Text style={styles.paragraph}>
-            This is a ScrollView example FOOTER.
-          </Text>
-        </ScrollView>
-      </View>
-    </SafeAreaView>
-
-  );
-}
-
-
+// const db = openDatabase(
+//   {
+//     name: 'UserDatabase.db',
+//   }
+// )
 
 const Tab = createBottomTabNavigator();
+
+
+// const Prueba = () => {
+
+//   const addCategory = () => {
+//   }
+
+//   useEffect(() => {
+//     createTables();
+//   }, [])
+
+//   const createTables = () => {
+//     db.transaction( txn => {
+//       txn.executeSql(
+//         'CREATE TABLE IF NOT EXISTS categories (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(20))',
+//         [],
+//         (sqlTxn , res) => {
+//           console.log("Table created successfully");
+//         },
+//         (error) => {
+//           console.log(error);
+//         }
+//       )
+//     })
+//   }
+
+//   const [categoryName, setCategoryName] = useState('');
+//   return (
+//     <View style={styles.container}>
+//       <TextInput
+//         placeholder='Enter Category Name'
+//         value={categoryName}
+//         onChangeText={(text) => setCategoryName(text)}
+//         />
+//       <Button
+//         title='Add Category'
+//         onPress={() => addCategory()} />
+
+//       </View>
+//   );
+// } // End of App
 
 export default function App() {
   return (
@@ -85,9 +83,11 @@ export default function App() {
           inactiveTintColor: 'gray',
 
         }}>
+        {/* <Tab.Screen name="Prueba" component={Prueba} /> */}
         <Tab.Screen name="Peso" component={Peso} />
-        <Tab.Screen name="Gallos" component={Gallos} />
-        <Tab.Screen name="prueba" component={Prueba} />
+        <Tab.Screen name="Gallos"  component={Gallos} />
+        <Tab.Screen name="Registro de Gallos" component={RegistroGallos} />
+        <Tab.Screen name="Prueba" component={Prueba} /> 
       </Tab.Navigator>
     </NavigationContainer>
   );
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'lightgrey',
+    backgroundColor: '#fff',
     paddingBottom: 40
   }
 

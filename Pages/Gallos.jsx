@@ -1,16 +1,47 @@
-import { View, Text, StyleSheet, SafeAreaView, TextInput, Dimensions, ScrollView, Image } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, StatusBar, SafeAreaView, TextInput, Dimensions, ScrollView, Image } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+import * as SQLite from "expo-sqlite";
 
-const Gallos = () => {
+function openDatabase() {
+    const db = SQLite.openDatabase("db.db");
+    return db;
+}
+
+const db = openDatabase();
+
+
+
+const Gallos = ({ navigation }) => {
+
+    const [gallos, setGallos] = useState([]);
+    const [galloAnterior, setgalloAnterior] = useState([]);
+    const [actualizar, setActualizar] = useState(0);
+
+    const getGallos = () => {
+        setgalloAnterior(gallos);
+        db.transaction(
+            async (tx) => {
+                tx.executeSql("select * from gallos", [], (_, { rows }) => {
+                    console.log("gallosantes", rows._array)
+                    setGallos(rows._array);
+                }
+                );
+            },
+            null,
+            null
+        );
+    }
+
+    useEffect(() => {
+            getGallos();
+    }, []);
     return (
-        <SafeAreaView style={styles.safeArea} >
+        <SafeAreaView style={{ ...styles.safeArea, paddingHorizontal: 10 }} >
 
             <View style={{ maxHeight: 70 }}>
                 <TextInput
-                    onChangeText={() => console.log(Dimensions.get('window'))}
-                    style={styles.input}
-                    height={60}
-                    width={Dimensions.get('window').width}
+                    style={{ ...styles.input, width: '100%', height: '90%', }}
                     placeholder="busqueda"
                     backgroundColor="white"
                 />
@@ -21,23 +52,30 @@ const Gallos = () => {
                     contentContainerStyle={styles.contentContainer}
                 >
                     {
-                        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0, 0, 0, 0, 0, 0].map((gallo, index) => {
+                        gallos.map((gallo, index) => {
                             return (
                                 <View key={index} style={styles.carta}>
-                                    <View style={{backgroundColor: 'blue', height: 100,}}>
-                                        {/* <Image 
-                                            source={{ uri: 'icon.png' }}
-                                            style={{ width: 400, height: 400 }} 
-                                        /> */}
+                                    <View style={{ height: 100, }}>
                                         <Image
+                                            source={{ uri: 'https://unsplash.it/1600/900?random' }}
+                                            style={{ width: 150, height: 150, borderRadius: 8 }}
+                                        />
+                                        {/* <Image
                                             source={require('../assets/icon.png')}
                                             style={{ width: 150, height: 150 }}
-                                            backgroundColor="red" 
-                                        />
+                                            backgroundColor="red"
+                                        /> */}
                                         {/* <Text style={styles.paragraph}>foto </Text> */}
                                     </View>
-                                    <View>
-                                        <Text style={styles.paragraph}>info </Text>
+                                    <View style={{ flex: 1 }}>
+                                        <View>
+                                            <Text style={{ ...styles.paragraph, textAlign: 'left' }}>Nombre </Text>
+                                            <Text style={{ ...styles.inParagraph, textAlign: 'left' }}>{gallo.name} </Text>
+                                        </View>
+                                        <View>
+                                            <Text style={{ ...styles.paragraph, textAlign: 'left' }}>Fecha Marcaje </Text>
+                                            <Text style={{ ...styles.inParagraph, textAlign: 'left' }}>{gallo.date} </Text>
+                                        </View>
                                     </View>
                                 </View>
                             );
@@ -116,10 +154,19 @@ const styles = StyleSheet.create({
         // margin: 10,
     },
     paragraph: {
-        margin: 24,
-        fontSize: 18,
-        fontWeight: 'bold',
-        textAlign: 'center',
+        marginLeft: 10,
+        marginTop: 10,
+        // margin: 24,
+        fontSize: 16,
+        // fontWeight: 'bold',
+        // textAlign: 'center',
+    },
+    inParagraph: {
+        marginLeft: 20,
+        // margin: 24,
+        fontSize: 14,
+        // fontWeight: 'bold',
+        // textAlign: 'center',
     },
     scrollView: {
         height: '100%',

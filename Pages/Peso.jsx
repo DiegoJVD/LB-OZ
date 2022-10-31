@@ -1,6 +1,30 @@
 import { View, Text, TouchableWithoutFeedback, Keyboard, SafeAreaView, StyleSheet, StatusBar, TextInput, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import useUtils from '../useUtils.js';
+import * as SQLite from "expo-sqlite";
+
+function openDatabase() {
+    const db = SQLite.openDatabase("db.db");
+    console.log(db);
+    return db;
+}
+
+const db = openDatabase();
+
+const createTables = () => {
+    db.transaction(txn => {
+        txn.executeSql(
+            'CREATE TABLE IF NOT EXISTS gallos (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(20), date VARCHAR(20), color VARCHAR(20))',
+            [],
+            (sqlTxn, res) => {
+                console.log("Table created successfully");
+            },
+            (error) => {
+                console.log(error);
+            }
+        )
+    })
+}
 
 const Peso = () => {
     const [libra, setLibra] = useState(0.0);
@@ -10,6 +34,11 @@ const Peso = () => {
         setLibra(text);
         setLibraOZ(libraToOnza(text));
     };
+
+    useEffect(() => {
+        createTables();
+        console.log('entre a la app');
+    }, []);
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <SafeAreaView style={styles.safeArea} >
